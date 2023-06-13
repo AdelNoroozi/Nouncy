@@ -27,26 +27,29 @@ class UserManager(models.Manager):
         client = self.create_user(username, password)
         client.role = 'CLN'
         client.save(using=self._db)
+        Client.objects.create(base_user=client)
         return client
 
     def create_content_manager(self, username, password):
-        client = self.create_user(username, password)
-        client.role = 'CM'
-        client.save(using=self._db)
-        return client
+        content_manager = self.create_user(username, password)
+        content_manager.role = 'CM'
+        content_manager.save(using=self._db)
+        ContentManager.objects.create(base_user=content_manager)
+        return content_manager
 
     def create_publisher(self, username, password):
-        client = self.create_user(username, password)
-        client.role = 'PUB'
-        client.save(using=self._db)
-        return client
+        publisher = self.create_user(username, password)
+        publisher.role = 'PUB'
+        publisher.save(using=self._db)
+        Publisher.objects.create(base_user=publisher)
+        return publisher
 
     def create_superuser(self, username, password):
-        client = self.create_user(username, password)
-        client.role = 'SU'
-        client.is_staff = True
-        client.save(using=self._db)
-        return client
+        superuser = self.create_user(username, password)
+        superuser.role = 'SU'
+        superuser.is_staff = True
+        superuser.save(using=self._db)
+        return superuser
 
 
 class BaseUser(BaseModel):
@@ -86,8 +89,50 @@ class BaseUser(BaseModel):
         return self.has_perm(self)
 
     def __str__(self):
-        return self.username
+        return f'{self.username} - {self.role}'
 
     class Meta:
         verbose_name = _('Base User')
         verbose_name_plural = _('Base Users')
+
+
+class Client(models.Model):
+    base_user = models.OneToOneField(BaseUser, on_delete=models.CASCADE, related_name='client',
+                                     verbose_name=_('base user'))
+
+    # some extra fields that are specific to the client
+
+    def __str__(self):
+        return self.base_user.username
+
+    class Meta:
+        verbose_name = _('Client')
+        verbose_name_plural = _('Clients')
+
+
+class Publisher(models.Model):
+    base_user = models.OneToOneField(BaseUser, on_delete=models.CASCADE, related_name='publisher',
+                                     verbose_name=_('base user'))
+
+    # some extra fields that are specific to the publisher
+
+    def __str__(self):
+        return self.base_user.username
+
+    class Meta:
+        verbose_name = _('Publisher')
+        verbose_name_plural = _('Publishers')
+
+
+class ContentManager(models.Model):
+    base_user = models.OneToOneField(BaseUser, on_delete=models.CASCADE, related_name='content_manager',
+                                     verbose_name=_('base user'))
+
+    # some extra fields that are specific to the content manager
+
+    def __str__(self):
+        return self.base_user.username
+
+    class Meta:
+        verbose_name = _('Content Manager')
+        verbose_name_plural = _('Content Managers')

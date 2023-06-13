@@ -35,7 +35,6 @@ class AbstractAddActorSerializer(serializers.ModelSerializer):
         return attrs
 
 
-# Publisher serializers
 class AddPublisherSerializer(AbstractAddActorSerializer):
 
     def create(self, validated_data):
@@ -48,3 +47,9 @@ class AddContentManagerSerializer(AbstractAddActorSerializer):
     def create(self, validated_data):
         content_manager = self.Meta.model.objects.create_content_manager(**self.validated_data)
         return content_manager
+
+
+class BaseUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BaseUser
+        exclude = ('password',)

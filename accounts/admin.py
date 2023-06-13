@@ -1,3 +1,5 @@
 from django.contrib import admin
 
-# Register your models here.
+from accounts.models import BaseUser
+
+admin.site.register(BaseUser)

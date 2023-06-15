@@ -1,12 +1,14 @@
+from django.core.exceptions import ValidationError
 from django.shortcuts import render
 from rest_framework import viewsets
+from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.generics import get_object_or_404
 from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from accounts.models import ContentManager
 from announcements.filters import AnnouncementFilter
 from announcements.models import Announcement
-from announcements.serializers import AnnouncementSerializer, AnnouncementMiniSerializer
+from announcements.serializers import AnnouncementSerializer, AnnouncementMiniSerializer, CreateAnnouncementSerializer
 
 
 class AnnouncementViewSet(viewsets.ModelViewSet):
@@ -20,8 +22,8 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
             return AnnouncementMiniSerializer
         if self.action == 'retrieve':
             return AnnouncementSerializer
-        else:
-            return AnnouncementSerializer
+        if self.action == 'create':
+            return CreateAnnouncementSerializer
 
     def get_queryset(self):
         if self.request.user.is_anonymous:
@@ -35,3 +37,8 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
         if user.role == 'CLN':
             return Announcement.objects.filter(creator=user)
         return Announcement.objects.none()
+
+    def get_serializer_context(self):
+        if self.request.user.is_anonymous:
+            raise AuthenticationFailed
+        return {'user': self.request.user}

@@ -8,7 +8,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from accounts.models import ContentManager
 from announcements.filters import AnnouncementFilter
 from announcements.models import Announcement
-from announcements.serializers import AnnouncementSerializer, AnnouncementMiniSerializer, CreateAnnouncementSerializer
+from announcements.serializers import AnnouncementSerializer, AnnouncementMiniSerializer, SaveAnnouncementSerializer
 
 
 class AnnouncementViewSet(viewsets.ModelViewSet):
@@ -22,8 +22,8 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
             return AnnouncementMiniSerializer
         if self.action == 'retrieve':
             return AnnouncementSerializer
-        if self.action == 'create':
-            return CreateAnnouncementSerializer
+        if self.action == 'create' or 'update':
+            return SaveAnnouncementSerializer
 
     def get_queryset(self):
         if self.request.user.is_anonymous:
@@ -42,3 +42,9 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
         if self.request.user.is_anonymous:
             raise AuthenticationFailed
         return {'user': self.request.user}
+
+    def perform_update(self, serializer: SaveAnnouncementSerializer):
+        announcement = serializer.instance
+        if not self.request.user.role == 'SU' or self.request.user == 'PUB':
+            announcement.status = 'WFP'
+        announcement.save()

@@ -20,7 +20,7 @@ class AnnouncementMiniSerializer(serializers.ModelSerializer):
         fields = ('id', 'title', 'creator', 'status')
 
 
-class CreateAnnouncementSerializer(serializers.ModelSerializer):
+class SaveAnnouncementSerializer(serializers.ModelSerializer):
     class Meta:
         model = Announcement
         fields = '__all__'
@@ -33,5 +33,14 @@ class CreateAnnouncementSerializer(serializers.ModelSerializer):
         return attrs
 
     def create(self, validated_data):
-        announcement = self.Meta.model.objects.create(**validated_data, creator=self.context['user'])
+        user = self.context['user']
+        status = None
+        if user.role == 'PUB' or user.role == 'SU':
+            status = 'P'
+        additional_data = {
+            'creator': user
+        }
+        if status:
+            additional_data['status'] = status
+        announcement = self.Meta.model.objects.create(**validated_data, **additional_data)
         return announcement

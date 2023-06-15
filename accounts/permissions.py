@@ -12,3 +12,20 @@ class AnnouncementPermission(BasePermission):
             return True
         else:
             return user.role != 'CM'
+
+
+class NotAuthenticated(BasePermission):
+    def has_permission(self, request, view):
+        return request.user.is_anonymous
+
+
+class IsSuperuser(BasePermission):
+    def has_permission(self, request, view):
+        if request.user.is_anonymous:
+            return False
+        return request.user.role == 'SU'
+
+
+class IsAuthenticated(BasePermission):
+    def has_permission(self, request, view):
+        return request.user.is_authenticated

@@ -53,3 +53,9 @@ class BaseUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = BaseUser
         exclude = ('password',)
+
+
+class BaseUserMiniSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BaseUser
+        fields = ('id', 'username', 'role')

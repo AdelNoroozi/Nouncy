@@ -17,8 +17,8 @@ class Announcement(BaseModel):
     content = models.TextField(verbose_name=_('content'))
     creator = models.ForeignKey(BaseUser, on_delete=models.RESTRICT, related_name='announcements',
                                 verbose_name=_('creator'))
-    reviewer = models.ForeignKey(ContentManager, on_delete=models.RESTRICT, blank=True, null=True,
-                                 related_name='announcements', verbose_name=_('reviewer'))
+    assigned_reviewer = models.ForeignKey(ContentManager, on_delete=models.RESTRICT, blank=True, null=True,
+                                          related_name='announcements', verbose_name=_('assigned_reviewer'))
     status = models.CharField(max_length=30, choices=STATUSES, default='WFC', verbose_name=_('status'))
 
     @staticmethod

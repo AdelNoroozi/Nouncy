@@ -1,10 +1,13 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, status
+from rest_framework.decorators import action
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.generics import get_object_or_404
 from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.response import Response
+
 from accounts.models import ContentManager
-from accounts.permissions import AnnouncementPermission
+from accounts.permissions import AnnouncementPermission, IsPublisher
 from announcements.filters import AnnouncementFilter
 from announcements.models import Announcement
 from announcements.serializers import AnnouncementSerializer, AnnouncementMiniSerializer, SaveAnnouncementSerializer
@@ -12,7 +15,6 @@ from announcements.serializers import AnnouncementSerializer, AnnouncementMiniSe
 
 class AnnouncementViewSet(viewsets.ModelViewSet):
     filter_backends = [SearchFilter, OrderingFilter, DjangoFilterBackend]
-    permission_classes = (AnnouncementPermission, )
     search_fields = ['title', 'content']
     ordering_fields = ['title', 'created_at', 'modified_at']
     filterset_class = AnnouncementFilter
@@ -43,6 +45,12 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
             raise AuthenticationFailed
         return {'user': self.request.user}
 
+    def get_permissions(self):
+        if self.action == 'publish':
+            return (IsPublisher(),)
+        else:
+            return (AnnouncementPermission(),)
+
     def perform_update(self, serializer: SaveAnnouncementSerializer):
         announcement = serializer.instance
         if not self.request.user.role == 'PUB':
@@ -52,3 +60,13 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
         announcement.save()
         serializer.save()
 
+    @action(detail=True, methods=['PATCH', ], permission_classes=())
+    def publish(self, request, pk=None):
+        announcement = get_object_or_404(Announcement, id=pk)
+        if announcement.status == 'P':
+            response = {'message': "announcement is already published"}
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+        announcement.status = 'P'
+        announcement.save()
+        response = {'message': "announcement published successfully"}
+        return Response(response, status=status.HTTP_200_OK)

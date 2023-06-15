@@ -14,6 +14,13 @@ class AnnouncementPermission(BasePermission):
             return user.role != 'CM'
 
 
+class IsPublisher(BasePermission):
+    def has_permission(self, request, view):
+        if request.user.is_anonymous:
+            return False
+        return request.user.role == 'PUB' or request.user.role == 'SU'
+
+
 class NotAuthenticated(BasePermission):
     def has_permission(self, request, view):
         return request.user.is_anonymous

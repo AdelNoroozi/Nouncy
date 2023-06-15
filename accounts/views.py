@@ -3,9 +3,9 @@ from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
 from accounts.models import BaseUser
-from accounts.serializers import RegisterClientSerializer, AddPublisherSerializer, BaseUserSerializer
+from accounts.serializers import RegisterClientSerializer, AddPublisherSerializer, BaseUserSerializer, \
+    AddContentManagerSerializer
 
 
 class RegisterClientView(CreateAPIView):
@@ -21,8 +21,8 @@ class AddPublisherView(AbstractAddActorView):
     serializer_class = AddPublisherSerializer
 
 
-class AddContentManagerSerializer(AbstractAddActorView):
-    serializer_class = AddPublisherSerializer
+class AddContentManagerView(AbstractAddActorView):
+    serializer_class = AddContentManagerSerializer
 
 
 class GetUserInfoView(APIView):

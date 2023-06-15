@@ -1,3 +1,4 @@
+from django.db import transaction
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.exceptions import AuthenticationFailed
@@ -46,7 +47,7 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
         return {'user': self.request.user}
 
     def get_permissions(self):
-        if self.action == 'publish':
+        if self.action == 'publish' or self.action == 'assign_reviewer':
             return (IsPublisher(),)
         else:
             return (AnnouncementPermission(),)
@@ -60,7 +61,7 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
         announcement.save()
         serializer.save()
 
-    @action(detail=True, methods=['PATCH', ], permission_classes=())
+    @action(detail=True, methods=['PATCH', ])
     def publish(self, request, pk=None):
         announcement = get_object_or_404(Announcement, id=pk)
         if announcement.status == 'P':
@@ -69,4 +70,25 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
         announcement.status = 'P'
         announcement.save()
         response = {'message': "announcement published successfully"}
+        return Response(response, status=status.HTTP_200_OK)
+
+    @transaction.atomic
+    @action(detail=True, methods=['PATCH', ])
+    def assign_reviewer(self, request, pk=None):
+        announcement = get_object_or_404(Announcement, id=pk)
+        if not announcement.status == 'WFP':
+            response = {'message': "only announcements that are waiting for publish can be assigned for a review"}
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+        assigned_reviewer_id = request.data.get('assigned_reviewer_id')
+        if assigned_reviewer_id is None:
+            response = {'message': "field error (assigned_reviewer_id)"}
+            return Response(response, status=status.HTTP_406_NOT_ACCEPTABLE)
+        if not isinstance(int(assigned_reviewer_id), int):
+            response = {'message': "assigned_reviewer_id must be an integer"}
+            return Response(response, status=status.HTTP_403_FORBIDDEN)
+        reviewer = get_object_or_404(ContentManager, id=assigned_reviewer_id)
+        announcement.assigned_reviewer = reviewer
+        announcement.status = 'WFR'
+        announcement.save()
+        response = {'message': f'announcement assigned to the reviewer {reviewer.base_user.username} successfully'}
         return Response(response, status=status.HTTP_200_OK)

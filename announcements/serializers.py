@@ -28,7 +28,7 @@ class SaveAnnouncementSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         creator = self.context['user']
-        if creator.role == 'CM' or creator.role == 'UD':
+        if creator.role == 'CM':
             raise serializers.ValidationError("Announcements creators must be clients or publishers")
         return attrs
 

@@ -56,8 +56,7 @@ class BaseUser(BaseModel):
     ROLES = (('SU', _('superuser')),
              ('PUB', _('publisher')),
              ('CM', _('content manager')),
-             ('CLN', _('client')),
-             ('UD', _('undefined')))
+             ('CLN', _('client')))
 
     username_validator = UnicodeUsernameValidator()
 

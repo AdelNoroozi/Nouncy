@@ -8,7 +8,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.response import Response
 
 from accounts.models import ContentManager
-from accounts.permissions import AnnouncementPermission, IsPublisher
+from accounts.permissions import AnnouncementPermission, IsPublisher, IsPublisherOrContentManager
 from announcements.filters import AnnouncementFilter
 from announcements.models import Announcement
 from announcements.serializers import AnnouncementSerializer, AnnouncementMiniSerializer, SaveAnnouncementSerializer
@@ -49,6 +49,8 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         if self.action == 'publish' or self.action == 'assign_reviewer':
             return (IsPublisher(),)
+        elif self.action == 'confirm_review':
+            return (IsPublisherOrContentManager(),)
         else:
             return (AnnouncementPermission(),)
 
@@ -56,6 +58,7 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
         announcement = serializer.instance
         if not self.request.user.role == 'PUB':
             announcement.status = 'WFP'
+            announcement.assigned_reviewer = None
         else:
             announcement.status = announcement.status
         announcement.save()
@@ -63,7 +66,7 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['PATCH', ])
     def publish(self, request, pk=None):
-        announcement = get_object_or_404(Announcement, id=pk)
+        announcement = get_object_or_404(self.get_queryset(), id=pk)
         if announcement.status == 'P':
             response = {'message': "announcement is already published"}
             return Response(response, status=status.HTTP_400_BAD_REQUEST)
@@ -72,10 +75,21 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
         response = {'message': "announcement published successfully"}
         return Response(response, status=status.HTTP_200_OK)
 
+    @action(detail=True, methods=['PATCH', ])
+    def reject(self, request, pk=None):
+        announcement = get_object_or_404(self.get_queryset(), id=pk)
+        if announcement.status == 'P' or announcement.status == 'R':
+            response = {'message': "can't reject announcement"}
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+        announcement.status = 'R'
+        announcement.save()
+        response = {'message': "announcement rejected successfully"}
+        return Response(response, status=status.HTTP_200_OK)
+
     @transaction.atomic
     @action(detail=True, methods=['PATCH', ])
     def assign_reviewer(self, request, pk=None):
-        announcement = get_object_or_404(Announcement, id=pk)
+        announcement = get_object_or_404(self.get_queryset(), id=pk)
         if not announcement.status == 'WFP':
             response = {'message': "only announcements that are waiting for publish can be assigned for a review"}
             return Response(response, status=status.HTTP_400_BAD_REQUEST)
@@ -91,4 +105,16 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
         announcement.status = 'WFR'
         announcement.save()
         response = {'message': f'announcement assigned to the reviewer {reviewer.base_user.username} successfully'}
+        return Response(response, status=status.HTTP_200_OK)
+
+    @transaction.atomic
+    @action(detail=True, methods=['PATCH', ])
+    def confirm_review(self, request, pk):
+        announcement = get_object_or_404(self.get_queryset(), id=pk)
+        if announcement.status == 'RWFP':
+            response = {'message': "announcement is already reviewed"}
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+        announcement.status = 'RWFP'
+        announcement.save()
+        response = {'message': f'announcement reviewed and confirmed successfully'}
         return Response(response, status=status.HTTP_200_OK)

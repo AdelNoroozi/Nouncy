@@ -8,6 +8,8 @@ There are three main roles: 1-client 2-publisher 3-content manager
 We use RESTful APIs for this application. For seeing all APIs run the app and go to this url:
 "{ your host or local host }/api/v1/swagger-ui"
 
+There is also a postman collection and an environment for testing APIs. 
+
 ## Tools
 <div style ="display: flex;">
   <img src="https://github.com/AdelNoroozi/Nouncy/blob/master/resources/python-icon.png" >
@@ -77,5 +79,7 @@ We use RESTful APIs for this application. For seeing all APIs run the app and go
 - get their user information
 - add new publishers
 - add new content managers
+
+! Content manager and publisher are sensetive roles, so adding new users with that roles should only be performed by a superior user.
 ##### Announcement Management
 - every single action that other roles can perform

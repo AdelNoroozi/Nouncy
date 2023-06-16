@@ -84,8 +84,8 @@ python manage.py createsuperuser
 - get their user information
 ##### Announcement Management
 - create announcements
-- update announcements (except for those whoch have been created by other publishers or superuser)
-- delete announcements (except for those whoch have been created by other publishers or superuser)
+- update announcements (except for those which have been created by other publishers or superuser)
+- delete announcements (except for those which have been created by other publishers or superuser)
 - get a list of all announcements
 - retrieve all announcements
 - search & order all announcements by the same fields as clients and content managers

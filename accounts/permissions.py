@@ -1,5 +1,7 @@
 from rest_framework.permissions import BasePermission, SAFE_METHODS
 
+from announcements.models import Announcement
+
 
 class AnnouncementPermission(BasePermission):
     def has_permission(self, request, view):
@@ -12,6 +14,15 @@ class AnnouncementPermission(BasePermission):
             return True
         else:
             return user.role != 'CM'
+
+    def has_object_permission(self, request, view, obj: Announcement):
+        if not request.method in SAFE_METHODS:
+            if obj.creator.role == 'PUB' or obj.creator.role == 'SU':
+                if obj.creator == request.user:
+                    return True
+                else:
+                    return False
+        return True
 
 
 class IsPublisher(BasePermission):

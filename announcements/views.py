@@ -111,8 +111,8 @@ class AnnouncementViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['PATCH', ])
     def confirm_review(self, request, pk):
         announcement = get_object_or_404(self.get_queryset(), id=pk)
-        if announcement.status == 'RWFP':
-            response = {'message': "announcement is already reviewed"}
+        if announcement.status == 'RWFP' or announcement.status == 'P':
+            response = {'message': "announcement is already reviewed or published"}
             return Response(response, status=status.HTTP_400_BAD_REQUEST)
         announcement.status = 'RWFP'
         announcement.save()

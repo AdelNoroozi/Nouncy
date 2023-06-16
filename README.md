@@ -6,9 +6,32 @@ This is a DRF web application for managing anouncements.
 There are three main roles: 1-client 2-publisher 3-content manager
 
 We use RESTful APIs for this application. For seeing all APIs run the app and go to this url:
+
 "{ your host or local host }/api/v1/swagger-ui"
 
-There is also a postman collection and an environment for testing APIs. 
+## Tutorial
+There is a postman collection and an environment for testing APIs. 
+
+You can run the app using docker.
+
+1- Open your terminal & go to the src directory where the Dockerfile exists.
+
+2- Build the docker image with this command:
+
+docker build -t nouncy .
+
+3- Now run a container using nouncy image with this command:
+
+docker run -p 8000:8000 nouncy
+
+4- If you need to perform actions that need superuser access, first open the container's terminal with this command:
+
+docker exec -t { running container's name } /bin/bash
+
+5- After running the terminal, create a superuser with this command:
+
+python manage.py createsuperuser
+
 
 ## Tools
 <div style ="display: flex;">

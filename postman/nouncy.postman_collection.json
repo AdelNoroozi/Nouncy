@@ -1,0 +1,1364 @@
+{
+	"info": {
+		"_postman_id": "b913871b-8939-4a83-9f09-9134b9909cd2",
+		"name": "nouncy",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "register",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"server ok\", function(){\r",
+							"    pm.response.to.not.have.status(500);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"valid\", function(){\r",
+							"    pm.expect(pm.response.code).to.not.equal(400);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"client creation\", function(){\r",
+							"    pm.expect(pm.response.code).to.equal(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "Alireza132",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "8j0polik",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{urls}}/accounts/register/",
+					"host": [
+						"{{urls}}"
+					],
+					"path": [
+						"accounts",
+						"register",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add publisher",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"server ok\", function(){\r",
+							"    pm.response.to.not.have.status(500);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"token found\", function () {\r",
+							"    var authToken = pm.request.headers.get('Authorization');\r",
+							"    pm.expect(authToken).to.match(/^Bearer\\s.+/);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"authorized\", function(){\r",
+							"    pm.expect(pm.response.code).not.oneOf([500, 401]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"publisher creation\", function(){\r",
+							"    pm.expect(pm.response.code).to.equal(201);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "publi2",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "tggsafsa",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{urls}}/accounts/add-publisher/",
+					"host": [
+						"{{urls}}"
+					],
+					"path": [
+						"accounts",
+						"add-publisher",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add content manager",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"server ok\", function(){\r",
+							"    pm.response.to.not.have.status(500);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"token found\", function () {\r",
+							"    var authToken = pm.request.headers.get('Authorization');\r",
+							"    pm.expect(authToken).to.match(/^Bearer\\s.+/);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"authorized\", function(){\r",
+							"    pm.expect(pm.response.code).not.oneOf([500, 401]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"publisher creation\", function(){\r",
+							"    pm.expect(pm.response.code).to.equal(201);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "contyd",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "tggs4ffff",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{urls}}/accounts/add-content-manager/",
+					"host": [
+						"{{urls}}"
+					],
+					"path": [
+						"accounts",
+						"add-content-manager",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login superuser",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"server ok\", function() {\r",
+							"    pm.response.to.not.have.status(500);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"var jsonData = JSON.parse(responseBody);\r",
+							"tests[\"login\"] = jsonData.access !==undefined;\r",
+							"\r",
+							"pm.environment.set(\"jwt_token\", jsonData.access);\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "adel",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "a",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{urls}}/accounts/token/",
+					"host": [
+						"{{urls}}"
+					],
+					"path": [
+						"accounts",
+						"token",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login client",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"server ok\", function() {\r",
+							"    pm.response.to.not.have.status(500);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"var jsonData = JSON.parse(responseBody);\r",
+							"tests[\"login\"] = jsonData.access !==undefined;\r",
+							"\r",
+							"pm.environment.set(\"jwt_token\", jsonData.access);\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "Alireza13",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "8j0polik",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{urls}}/accounts/token/",
+					"host": [
+						"{{urls}}"
+					],
+					"path": [
+						"accounts",
+						"token",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login publisher",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"server ok\", function() {\r",
+							"    pm.response.to.not.have.status(500);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"var jsonData = JSON.parse(responseBody);\r",
+							"tests[\"login\"] = jsonData.access !==undefined;\r",
+							"\r",
+							"pm.environment.set(\"jwt_token\", jsonData.access);\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "publi2",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "tggsafsa",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{urls}}/accounts/token/",
+					"host": [
+						"{{urls}}"
+					],
+					"path": [
+						"accounts",
+						"token",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login content manager",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"server ok\", function() {\r",
+							"    pm.response.to.not.have.status(500);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"var jsonData = JSON.parse(responseBody);\r",
+							"tests[\"login\"] = jsonData.access !==undefined;\r",
+							"\r",
+							"pm.environment.set(\"jwt_token\", jsonData.access);\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "username",
+							"value": "conty",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "tggs4ffff",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{urls}}/accounts/token/",
+					"host": [
+						"{{urls}}"
+					],
+					"path": [
+						"accounts",
+						"token",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get my info",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Server is fine\", function () {\r",
+							"    pm.response.to.not.have.status(500);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"token found\", function () {\r",
+							"    var authToken = pm.request.headers.get('Authorization');\r",
+							"    pm.expect(authToken).to.match(/^Bearer\\s.+/);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"fine response\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "{{urls}}/accounts/whoami/",
+					"host": [
+						"{{urls}}"
+					],
+					"path": [
+						"accounts",
+						"whoami",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "list announcments",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"server ok\", function(){\r",
+							"    pm.response.to.not.have.status(500);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"token found\", function () {\r",
+							"    var authToken = pm.request.headers.get('Authorization');\r",
+							"    pm.expect(authToken).to.match(/^Bearer\\s.+/);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"authorized\", function(){\r",
+							"    pm.expect(pm.response.code).not.oneOf([500, 401]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"response ok\", function(){\r",
+							"    pm.expect(pm.response.code).to.equal(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/v1/announcements",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1",
+						"announcements"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "retrieve announcment",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"server ok\", function(){\r",
+							"    pm.response.to.not.have.status(500);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"token found\", function () {\r",
+							"    var authToken = pm.request.headers.get('Authorization');\r",
+							"    pm.expect(authToken).to.match(/^Bearer\\s.+/);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"authorized\", function(){\r",
+							"    pm.expect(pm.response.code).not.oneOf([500, 401]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"accessable data\", function(){\r",
+							"    pm.expect(pm.response.code).not.oneOf([500, 401, 404]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"response ok\", function(){\r",
+							"    pm.expect(pm.response.code).to.equal(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{jwt_token}}"
+					}
+				],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/v1/announcements/32",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1",
+						"announcements",
+						"32"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "order announcements",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"server ok\", function(){\r",
+							"    pm.response.to.not.have.status(500);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"token found\", function () {\r",
+							"    var authToken = pm.request.headers.get('Authorization');\r",
+							"    pm.expect(authToken).to.match(/^Bearer\\s.+/);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"authorized\", function(){\r",
+							"    pm.expect(pm.response.code).not.oneOf([500, 401]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"response ok\", function(){\r",
+							"    pm.expect(pm.response.code).to.equal(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/v1/announcements/?ordering=-created_at",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1",
+						"announcements",
+						""
+					],
+					"query": [
+						{
+							"key": "ordering",
+							"value": "-created_at"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "search announcements",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/v1/announcements/?search=asse",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1",
+						"announcements",
+						""
+					],
+					"query": [
+						{
+							"key": "search",
+							"value": "asse"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "filter announcements",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"server ok\", function(){\r",
+							"    pm.response.to.not.have.status(500);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"token found\", function () {\r",
+							"    var authToken = pm.request.headers.get('Authorization');\r",
+							"    pm.expect(authToken).to.match(/^Bearer\\s.+/);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"authorized\", function(){\r",
+							"    pm.expect(pm.response.code).not.oneOf([500, 401]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"response ok\", function(){\r",
+							"    pm.expect(pm.response.code).to.equal(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/v1/announcements/?status=WFP&creator=&creator__role=&assigned_reviewer=&created_at__gt=&created_at__lt=&modified_at__gt=2023-06-15T07:23:59.304057Z&modified_at__lt=2024-06-15T07:23:59.304057Z",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1",
+						"announcements",
+						""
+					],
+					"query": [
+						{
+							"key": "status",
+							"value": "WFP"
+						},
+						{
+							"key": "creator",
+							"value": ""
+						},
+						{
+							"key": "creator__role",
+							"value": ""
+						},
+						{
+							"key": "assigned_reviewer",
+							"value": ""
+						},
+						{
+							"key": "created_at__gt",
+							"value": ""
+						},
+						{
+							"key": "created_at__lt",
+							"value": ""
+						},
+						{
+							"key": "modified_at__gt",
+							"value": "2023-06-15T07:23:59.304057Z"
+						},
+						{
+							"key": "modified_at__lt",
+							"value": "2024-06-15T07:23:59.304057Z"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "create announcments",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"server ok\", function(){\r",
+							"    pm.response.to.not.have.status(500);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"token found\", function () {\r",
+							"    var authToken = pm.request.headers.get('Authorization');\r",
+							"    pm.expect(authToken).to.match(/^Bearer\\s.+/);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"authorized\", function(){\r",
+							"    pm.expect(pm.response.code).not.oneOf([500, 401]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"allowed to perform action\", function(){\r",
+							"    pm.expect(pm.response.code).not.oneOf([500, 401 ,403]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"announcement created\", function(){\r",
+							"    pm.expect(pm.response.code).to.equal(201);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{jwt_token}}"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "title",
+							"value": "ano1",
+							"type": "text"
+						},
+						{
+							"key": "content",
+							"value": "ddfdsa",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/v1/announcements/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1",
+						"announcements",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update announcements",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"server ok\", function(){\r",
+							"    pm.response.to.not.have.status(500);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"token found\", function () {\r",
+							"    var authToken = pm.request.headers.get('Authorization');\r",
+							"    pm.expect(authToken).to.match(/^Bearer\\s.+/);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"authorized\", function(){\r",
+							"    pm.expect(pm.response.code).not.oneOf([500, 401]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"accessable data\", function(){\r",
+							"    pm.expect(pm.response.code).not.oneOf([500, 401, 404]);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"allowed to perform action\", function(){\r",
+							"    pm.expect(pm.response.code).not.oneOf([500, 401, 404 ,403]);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"updated\", function(){\r",
+							"    pm.expect(pm.response.code).to.equal(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "title",
+							"value": "ddfftfffrrewdd",
+							"type": "text"
+						},
+						{
+							"key": "content",
+							"value": "ffferrddddsdddd",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/v1/announcements/36/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1",
+						"announcements",
+						"36",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete announcements",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"server ok\", function(){\r",
+							"    pm.response.to.not.have.status(500);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"token found\", function () {\r",
+							"    var authToken = pm.request.headers.get('Authorization');\r",
+							"    pm.expect(authToken).to.match(/^Bearer\\s.+/);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"authorized\", function(){\r",
+							"    pm.expect(pm.response.code).not.oneOf([500, 401]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"accessable data\", function(){\r",
+							"    pm.expect(pm.response.code).not.oneOf([500, 401, 404]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"allowed to perform action\", function(){\r",
+							"    pm.expect(pm.response.code).not.oneOf([500, 401, 404 ,403]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"deleted\", function(){\r",
+							"    pm.expect(pm.response.code).to.equal(204);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{jwt_token}}"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "title",
+							"value": "ddfftfff",
+							"type": "text"
+						},
+						{
+							"key": "content",
+							"value": "ffferr",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/v1/announcements/35/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1",
+						"announcements",
+						"35",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "publish announcement",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"server ok\", function(){\r",
+							"    pm.response.to.not.have.status(500);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"token found\", function () {\r",
+							"    var authToken = pm.request.headers.get('Authorization');\r",
+							"    pm.expect(authToken).to.match(/^Bearer\\s.+/);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"authorized\", function(){\r",
+							"    pm.expect(pm.response.code).not.oneOf([500, 401]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"allowed to perform action\", function(){\r",
+							"    pm.expect(pm.response.code).not.oneOf([500, 401, 403]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"accessable data\", function(){\r",
+							"    pm.expect(pm.response.code).not.oneOf([500, 401, 403, 404]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"valid object to publish\", function(){\r",
+							"    pm.expect(pm.response.code).not.oneOf([500, 401, 403, 404, 400]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"published\", function(){\r",
+							"    pm.expect(pm.response.code).to.equal(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/v1/announcements/37/publish/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1",
+						"announcements",
+						"37",
+						"publish",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "reject announcement",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"server ok\", function(){\r",
+							"    pm.response.to.not.have.status(500);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"token found\", function () {\r",
+							"    var authToken = pm.request.headers.get('Authorization');\r",
+							"    pm.expect(authToken).to.match(/^Bearer\\s.+/);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"authorized\", function(){\r",
+							"    pm.expect(pm.response.code).not.oneOf([500, 401]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"allowed to perform action\", function(){\r",
+							"    pm.expect(pm.response.code).not.oneOf([500, 401, 403]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"accessable data\", function(){\r",
+							"    pm.expect(pm.response.code).not.oneOf([500, 401, 403, 404]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"valid object to reject\", function(){\r",
+							"    pm.expect(pm.response.code).not.oneOf([500, 401, 403, 404, 400]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"rejected\", function(){\r",
+							"    pm.expect(pm.response.code).to.equal(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Bearer {{jwt_token}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/v1/announcements/36/reject/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1",
+						"announcements",
+						"36",
+						"reject",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "assign reviewer",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"server ok\", function(){\r",
+							"    pm.response.to.not.have.status(500);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"token found\", function () {\r",
+							"    var authToken = pm.request.headers.get('Authorization');\r",
+							"    pm.expect(authToken).to.match(/^Bearer\\s.+/);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"authorized\", function(){\r",
+							"    pm.expect(pm.response.code).not.oneOf([500, 401]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"allowed to perform action\", function(){\r",
+							"    pm.expect(pm.response.code).not.oneOf([500, 401, 403]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"accessable data\", function(){\r",
+							"    pm.expect(pm.response.code).not.oneOf([500, 401, 403, 404]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"valid object to assign reviewer\", function(){\r",
+							"    pm.expect(pm.response.code).not.oneOf([500, 401, 403, 404, 400]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"assigned\", function(){\r",
+							"    pm.expect(pm.response.code).to.equal(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{jwt_token}}"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "assigned_reviewer_id",
+							"value": "1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/v1/announcements/38/assign_reviewer/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1",
+						"announcements",
+						"38",
+						"assign_reviewer",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "confirm review",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"server ok\", function(){\r",
+							"    pm.response.to.not.have.status(500);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"token found\", function () {\r",
+							"    var authToken = pm.request.headers.get('Authorization');\r",
+							"    pm.expect(authToken).to.match(/^Bearer\\s.+/);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"authorized\", function(){\r",
+							"    pm.expect(pm.response.code).not.oneOf([500, 401]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"allowed to perform action\", function(){\r",
+							"    pm.expect(pm.response.code).not.oneOf([500, 401, 403]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"accessable data\", function(){\r",
+							"    pm.expect(pm.response.code).not.oneOf([500, 401, 403, 404]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"valid object to review\", function(){\r",
+							"    pm.expect(pm.response.code).not.oneOf([500, 401, 403, 404, 400]);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"reviewed\", function(){\r",
+							"    pm.expect(pm.response.code).to.equal(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Authorization",
+						"type": "text",
+						"value": "Bearer {{jwt_token}}"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "assigned_reviewer_id",
+							"value": "1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/v1/announcements/38/confirm_review/",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1",
+						"announcements",
+						"38",
+						"confirm_review",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

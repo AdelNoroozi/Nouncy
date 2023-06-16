@@ -8,7 +8,6 @@ djangorestframework-simplejwt==5.2.2
 drf-spectacular==0.26.2
 inflection==0.5.1
 jsonschema==4.17.3
-psycopg2==2.9.6
 PyJWT==2.7.0
 pyrsistent==0.19.3
 pytz==2023.3
